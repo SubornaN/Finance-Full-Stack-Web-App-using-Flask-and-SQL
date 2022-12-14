@@ -37,8 +37,10 @@ application.secret_key = 'TESTKEY123!'
 # Create and initialize the Flask-Session object AFTER `app` has been configured
 #server_session = Session(application)
 
+
 # Configure Flask to use local SQLite3 database with SQLAlchemy
-application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'finances.db')
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{user}:{pw}@{url}:3306/{db}'.format(user=os.getenv("MYSQL_USER"), pw=os.getenv("MYSQL_PASSWORD"), url=os.getenv("MYSQL_ENDPOINT"), db=os.getenv("MYSQL_DATABASE"))
+
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 application.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(application)
@@ -115,7 +117,7 @@ users_schema = UsersSchema
 portfolio_schema = PortfolioSchema(many=True)
 bought_schema = BoughtSchema(many=True)
 sold_schema = SoldSchema(many=True)
-db.create_all()
+# db.create_all()
 
 
 # Make sure API key is set
