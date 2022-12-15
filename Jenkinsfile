@@ -57,7 +57,7 @@ pipeline {
                     string(credentialsId: 'MYSQL_PASSWORD', variable: 'rds_password'),
                     ]) {
                         dir('Terraform') {
-                            sh 'terraform destroy -auto-approve'
+                            sh 'terraform destroy -auto-approve -var="aws_access_key=$aws_access_key" -var="aws_secret_key=$aws_secret_key" -var="rds_username=$rds_username" -var="rds_password=$rds_password"'
                         }
                     }
             }
