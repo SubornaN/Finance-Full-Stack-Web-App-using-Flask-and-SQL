@@ -1,19 +1,3 @@
-resource "aws_lb_target_group" "finance-app" {
-  name        = "finance-app"
-  port        = 5000
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = aws_vpc.app_vpc.id
-
-  health_check {
-    enabled  = true
-    path     = "/health"
-    interval = 300
-  }
-
-  depends_on = [aws_alb.finance_app]
-}
-
 resource "aws_alb" "finance_app" {
   name               = "finance-lb"
   internal           = false
@@ -31,6 +15,23 @@ resource "aws_alb" "finance_app" {
   depends_on = [aws_internet_gateway.igw]
 }
 
+resource "aws_lb_target_group" "finance-app" {
+  name        = "finance-app"
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_vpc.app_vpc.id
+
+  health_check {
+    enabled  = true
+    path     = "/health"
+    interval = 300
+  }
+
+  depends_on = [aws_alb.finance_app]
+}
+
+
 resource "aws_alb_listener" "finance_app_listener" {
   load_balancer_arn = aws_alb.finance_app.arn
   port              = "80"
@@ -42,6 +43,3 @@ resource "aws_alb_listener" "finance_app_listener" {
   }
 }
 
-output "alb_finance" {
-  value = "http://${aws_alb.finance_app.dns_name}"
-}
