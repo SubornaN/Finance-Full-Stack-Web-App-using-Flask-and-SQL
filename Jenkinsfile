@@ -10,8 +10,8 @@ pipeline {
         pip install -r requirements.txt
         export FLASK_APP=application
         flask run &
-        sleep 30
         '''
+        sleep(time: 60, unit: "SECONDS")
      }
    }
   }
