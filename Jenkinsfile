@@ -2,7 +2,9 @@ pipeline {
   agent{label 'awsDevelop'}
    stages {
     stage ('Develop') {
-      steps {
+      steps 
+      withCredentials([string(credentialsId: 'API_KEY', variable: 'API_KEY')])
+      {
         sh '''#!/bin/bash
         python3 -m venv test-env
         source test-env/bin/activate
