@@ -9,9 +9,8 @@ pipeline {
         pip install pip --upgrade
         pip install -r requirements.txt
         export FLASK_APP=application
-        flask run &
+        timeout 30s flask run &
         '''
-        sleep(time: 60, unit: "SECONDS")
      }
    }
   }
