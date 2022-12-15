@@ -1,21 +1,66 @@
 pipeline {
   agent any
    stages {
-    stage ('Develop') {
-      agent{label 'awsDevelop'}
-      steps {
-        withCredentials([string(credentialsId: 'API_KEY', variable: 'API_KEY')])
-        {
-          sh '''#!/bin/bash
-          python3 -m venv test-env
-          source test-env/bin/activate
-          pip install pip --upgrade
-          pip install -r requirements.txt
-          export FLASK_APP=application
-          flask run &
-          '''
+
+    stage('Init') {
+            agent{label 'TerraformAgent'}
+            steps {
+                withCredentials([
+                    string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
+                    string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key'),
+                    string(credentialsId: 'MYSQL_USERNAME', variable: 'rds_username'),
+                    string(credentialsId: 'MYSQL_PASSWORD', variable: 'rds_password'),
+                    ]) {
+                        dir('Terraform') {
+                            sh 'terraform init' 
+                        }
+                    }
+            }
         }
-      }
-   }
+        stage('Plan') {
+            agent{label 'TerraformAgent'}
+            steps {
+                withCredentials([
+                    string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
+                    string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key'),
+                    string(credentialsId: 'MYSQL_USERNAME', variable: 'rds_username'),
+                    string(credentialsId: 'MYSQL_PASSWORD', variable: 'rds_password'),
+                    ]) {
+                        dir('Terraform') {
+                            sh 'terraform plan -out plan.tfplan -var="aws_access_key=$aws_access_key" -var="aws_secret_key=$aws_secret_key"' 
+                        }
+                    }
+            }
+        }
+        stage('Apply') {
+            agent{label 'TerraformAgent'}
+            steps {
+                withCredentials([
+                    string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
+                    string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key'),
+                    string(credentialsId: 'MYSQL_USERNAME', variable: 'rds_username'),
+                    string(credentialsId: 'MYSQL_PASSWORD', variable: 'rds_password'),
+                    ]) {
+                        dir('Terraform') {
+                            sh 'terraform apply plan.tfplan' 
+                        }
+                    }
+            }
+        }
+        // stage('Destroy') {
+        //     agent{label 'TerraformAgent'}
+        //     steps {
+        //         withCredentials([
+                    // string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
+                    // string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key'),
+                    // string(credentialsId: 'MYSQL_USERNAME', variable: 'rds_username'),
+                    // string(credentialsId: 'MYSQL_PASSWORD', variable: 'rds_password'),
+                    // ]) {
+        //                 dir('intTerraform') {
+        //                     sh 'terraform destroy -auto-approve -var="aws_access_key=$aws_access_key" -var="aws_secret_key=$aws_secret_key"'
+        //                 }
+        //             }
+        //     }
+        // }  
   }
 }

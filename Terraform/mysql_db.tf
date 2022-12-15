@@ -8,8 +8,8 @@ resource "aws_db_instance" "rds_instance" {
   engine_version              = "8.0.28"
   instance_class              = "db.t3.micro"
   db_name                     = "financedb"
-  username                    = "admin"
-  password                    = "admin123"
+  username                    = var.rds_username
+  password                    = var.rds_password
   port                        = 3306
   vpc_security_group_ids      = [aws_security_group.rds_sg.id, aws_security_group.ingress_app.id]
 

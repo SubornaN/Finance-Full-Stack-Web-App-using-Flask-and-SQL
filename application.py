@@ -39,7 +39,7 @@ application.secret_key = 'TESTKEY123!'
 
 
 # Configure Flask to use local SQLite3 database with SQLAlchemy
-application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'finances.db')
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{user}:{pw}@{url}/{db}'.format(user=os.getenv("MYSQL_USER"), pw=os.getenv("MYSQL_PASSWORD"), url=os.getenv("MYSQL_ENDPOINT"), db=os.getenv("MYSQL_DATABASE"))
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 application.config['SQLALCHEMY_ECHO'] = True
