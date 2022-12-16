@@ -24,10 +24,10 @@ pipeline {
               {
                 sh '''#!/bin/bash
                 echo API_KEY=${env.API_KEY} > apikey.txt
-                docker build . -t finance_app:v8 --no-cache
+                sudo docker build . -t finance_app:v8 --no-cache
                 #docker tag finance_app:v8 suborna/finance_app:v8
                 #docker push suborna/web_app:v8
-                docker run --rm -p 5000:5000 finance_app:v8
+                sudo docker run --rm -p 5000:5000 finance_app:v8
                 #docker rmi suborna/web_app:v8
                 '''
               }
