@@ -2,7 +2,7 @@ pipeline {
   agent any
    stages {
     stage ('Build') {
-      agent{label 'awsDevelop'}
+      agent{label 'awsStaging'}
       steps {
         sh '''#!/bin/bash
         python3 -m venv test1
@@ -16,7 +16,7 @@ pipeline {
    }
 
     stage ('Terraform init') {
-      agent{label 'TerraformAgent'}
+      agent{label 'awsStaging'}
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
@@ -27,7 +27,7 @@ pipeline {
       }
   }  
      stage('Terraform Plan') {
-      agent{label 'TerraformAgent'}   
+      agent{label 'awsStaging'}   
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'),
                         string(credentialsId: 'API_KEY', variable: 'API_KEY'), 
@@ -40,7 +40,7 @@ pipeline {
     }
    }
      stage('Terraform Apply') {
-      agent{label 'TerraformAgent'}
+      agent{label 'awsStaging'}
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
@@ -54,7 +54,7 @@ pipeline {
       }
   
   stage('Terraform Destroy') {
-      agent{label 'TerraformAgent'}
+      agent{label 'awsStaging'}
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'),
         string(credentialsId: 'API_KEY', variable: 'API_KEY'),
