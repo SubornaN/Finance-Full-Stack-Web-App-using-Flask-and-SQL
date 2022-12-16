@@ -25,9 +25,9 @@ pipeline {
                 echo API_KEY=$API_KEY > apikey.txt
                 sudo docker build . -t finance_app:v8 --no-cache
                 sudo docker tag finance_app:v8 suborna/finance_app:v8
-                sudo docker push suborna/web_app:v8
+                sudo docker push suborna/finance_app:v8
                 #sudo docker run --rm -d -p 5000:5000 finance_app:v8
-                sudo docker rmi suborna/web_app:v8
+                sudo docker rmi suborna/finance_app:v8
                 '''
               }
             }
