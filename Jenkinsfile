@@ -3,7 +3,7 @@ pipeline {
    stages {
 
     stage('Init') {
-            agent{label 'TerraformAgent'}
+            agent{label 'awsProduction'}
             steps {
                 withCredentials([
                     string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
@@ -18,7 +18,7 @@ pipeline {
             }
         }
         stage('Plan') {
-            agent{label 'TerraformAgent'}
+            agent{label 'awsProduction'}
             steps {
                 withCredentials([
                     string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
@@ -33,7 +33,7 @@ pipeline {
             }
         }
         stage('Apply') {
-            agent{label 'TerraformAgent'}
+            agent{label 'awsProduction'}
             steps {
                 withCredentials([
                     string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
@@ -48,7 +48,7 @@ pipeline {
             }
         }
         // stage('Destroy') {
-        //     agent{label 'TerraformAgent'}
+        //     agent{label 'awsProduction'}
         //     steps {
         //         withCredentials([
         //             string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
