@@ -15,7 +15,7 @@ pipeline {
    }
 
     stage ('Terraform init') {
-      agent{label 'terrage'}
+      agent{label 'TerraformAgent'}
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
@@ -26,7 +26,7 @@ pipeline {
       }
   }  
      stage('Terraform Plan') {
-      agent{label 'terrage'}   
+      agent{label 'TerraformAgent'}   
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'),
                         string(credentialsId: 'API_KEY', variable: 'API_KEY'), 
@@ -39,7 +39,7 @@ pipeline {
     }
    }
      stage('Terraform Apply') {
-      agent{label 'terrage'}
+      agent{label 'TerraformAgent'}
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
@@ -53,7 +53,7 @@ pipeline {
       }
   
   stage('Terraform Destroy') {
-      agent{label 'terrage'}
+      agent{label 'TerraformAgent'}
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'),
         string(credentialsId: 'API_KEY', variable: 'API_KEY'),
