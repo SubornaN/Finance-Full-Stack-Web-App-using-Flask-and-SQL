@@ -28,6 +28,7 @@ pipeline {
                 sudo docker push suborna/finance_app:v8
                 #sudo docker run --rm -d -p 5000:5000 finance_app:v8
                 sudo docker rmi suborna/finance_app:v8
+                sudo docker rmi finance_app:v8
                 '''
               }
             }
