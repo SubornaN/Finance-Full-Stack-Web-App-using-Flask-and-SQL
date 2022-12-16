@@ -6,6 +6,7 @@ from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from tempfile import mkdtemp
+from dotenv import load_dotenv
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import errorPage, login_required, lookup, historyData, usd
@@ -37,10 +38,17 @@ application.secret_key = 'TESTKEY123!'
 # Create and initialize the Flask-Session object AFTER `app` has been configured
 #server_session = Session(application)
 
+# os.environ.get('USER')
+# os.environ.get('PASSWORD')
+# os.environ.get('ENDPOINT')
+# os.environ.get('DATABASE')
+# os.environ.get('DB_URI')
+
+load_dotenv()
 
 # Configure Flask to use local SQLite3 database with SQLAlchemy
-application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{user}:{pw}@{url}/{db}'.format(user=os.getenv("MYSQL_USER"), pw=os.getenv("MYSQL_PASSWORD"), url=os.getenv("MYSQL_ENDPOINT"), db=os.getenv("MYSQL_DATABASE"))
-
+application.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
+#application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'finances.db')
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 application.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(application)
@@ -423,7 +431,7 @@ def register():
                 return errorPage(title="Forbidden", info = "Username already taken", file="animated-403.svg")
         
         # All users automatically recieve $10,000 to start with
-        cash = 10000
+        cash = request.form.get("cash")
 
         # Add and commit the data into database
         db.session.add(Users(username, hashed, cash))

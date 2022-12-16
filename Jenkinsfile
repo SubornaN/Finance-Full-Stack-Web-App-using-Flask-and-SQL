@@ -2,6 +2,7 @@ pipeline {
   agent any
    stages {
     stage ('Build') {
+      agent{label 'awsStaging'}
       steps {
         sh '''#!/bin/bash
         python3 -m venv test1
@@ -14,10 +15,8 @@ pipeline {
      }
    }
 
-    stage ('Staging init') { 
-      when {
-                branch 'staging'
-            }
+    stage ('Terraform init') {
+      agent{label 'awsStaging'}
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
@@ -27,34 +26,45 @@ pipeline {
          }
       }
   }  
-     stage('Staging Plan') {
-      when {
-                branch 'staging'
-            }     
+     stage('Terraform Plan') {
+      agent{label 'awsStaging'}   
       steps {
-        withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
+        withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'),
+                        string(credentialsId: 'API_KEY', variable: 'API_KEY'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
                             dir('Staging_Terra') {
-                              sh 'terraform plan -out plan.tfplan -var="aws_access_key=$aws_access_key" -var="aws_secret_key=$aws_secret_key"' 
+                              sh 'terraform plan -out plan.tfplan -var="aws_access_key=$aws_access_key" -var="aws_secret_key=$aws_secret_key" -var="API_KEY"=$API_KEY'
+                            
                             }
          }
     }
    }
-     stage('Staging Apply') {
-      when {
-                branch 'staging'
-            }
+     stage('Terraform Apply') {
+      agent{label 'awsStaging'}
       steps {
         withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'), 
                         string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
                             dir('Staging_Terra') {
 
                               sh 'terraform apply plan.tfplan' 
+                            
                             }
          }
        }
       }
-
+  
+  stage('Terraform Destroy') {
+      agent{label 'awsStaging'}
+      steps {
+        withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'aws_access_key'),
+        string(credentialsId: 'API_KEY', variable: 'API_KEY'),
+        string(credentialsId: 'AWS_SECRET_KEY', variable: 'aws_secret_key')]) {
+        dir('Staging_Terra') {
+        sh 'terraform destroy -auto-approve -var="aws_access_key=$aws_access_key" -var="aws_secret_key=$aws_secret_key" -var="API_KEY"=$API_KEY'
+      }
+    }
+  }
+  }
 
    /*
     stage ('test') {
@@ -73,56 +83,14 @@ pipeline {
        
       }
     }
+
+
     stage ('e2e tests - cypress') {
       steps {
 
       }
     }
 
-
-
-    stage ('Create Image') {
-      agent{label 'REPLACE_LABEL'}
-      steps {
-
-      }
-    }
-
-    stage ('Push to Dockerhub') {
-      agent{label 'REPLACE_LABEL'}
-      steps {
-
-      }
-    }
-
-    stage ('TF-init') {
-      agent{label 'REPLACE_LABEL'}
-      steps {
-
-      }
-    }
-
-    stage ('TF-plan') {
-      agent{label 'REPLACE_LABEL'}
-      steps {
-
-      }
-    }
-
-    stage ('TF-apply') {
-      agent{label 'REPLACE_LABEL'}
-      steps {
-
-      }
-    }
-
-    stage ('TF-destroy') {
-      agent{label 'REPLACE_LABEL'}
-      steps {
-
-      }
-    }
-    */
 
     
   }
@@ -134,3 +102,4 @@ pipeline {
   }
   */
  }
+}
