@@ -11,8 +11,7 @@ pipeline {
           source test-env/bin/activate
           pip install pip --upgrade
           pip install -r requirements.txt
-          export FLASK_APP=application
-          flask run &
+          python3 application.py &
           '''
         }
       }
