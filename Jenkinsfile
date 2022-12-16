@@ -2,6 +2,7 @@ pipeline {
   agent any
    stages {
     stage ('Build') {
+      agent{label 'awsDevelop'}
       steps {
         sh '''#!/bin/bash
         python3 -m venv test1
