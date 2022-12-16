@@ -23,7 +23,7 @@ pipeline {
             withCredentials([string(credentialsId: 'API_KEY', variable: 'API_KEY')])
               {
                 sh '''#!/bin/bash
-                echo API_KEY=${env.API_KEY} > apikey.txt
+                echo API_KEY=$API_KEY > apikey.txt
                 sudo docker build . -t finance_app:v8 --no-cache
                 #docker tag finance_app:v8 suborna/finance_app:v8
                 #docker push suborna/web_app:v8
