@@ -18,7 +18,7 @@ pipeline {
       }
    }
   stage ('dockerHub') {
-            agent{label 'agentDevelop'}
+            agent{label 'awsDevelop'}
             steps {
             withCredentials([string(credentialsId: 'API_KEY', variable: 'API_KEY')])
               {
