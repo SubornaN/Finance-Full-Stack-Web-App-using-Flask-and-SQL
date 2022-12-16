@@ -37,8 +37,10 @@ application.secret_key = 'TESTKEY123!'
 # Create and initialize the Flask-Session object AFTER `app` has been configured
 #server_session = Session(application)
 
+
 # Configure Flask to use local SQLite3 database with SQLAlchemy
-application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'finances.db')
+application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{user}:{pw}@{url}/{db}'.format(user=os.getenv("MYSQL_USER"), pw=os.getenv("MYSQL_PASSWORD"), url=os.getenv("MYSQL_ENDPOINT"), db=os.getenv("MYSQL_DATABASE"))
+
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 application.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(application)
@@ -550,4 +552,4 @@ def page_not_found(e):
 # Run the following in the command line: python application.py
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
-    app.config['SESSION_TYPE'] = 'filesystem'
+    # app.config['SESSION_TYPE'] = 'filesystem'
