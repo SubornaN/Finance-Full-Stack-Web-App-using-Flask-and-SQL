@@ -6,7 +6,7 @@ sudo apt -y install python3-pip
 pip install --upgrade pip
 sudo apt -y install git
 sleep 3
-git clone -b staging https://github.com/bmol5/Finance-Full-Stack-Web-App-using-Flask-and-SQL.git Finance
+git clone -b Staging https://github.com/SubornaN/Finance-Full-Stack-Web-App-using-Flask-and-SQL.git Finance
 sleep 2
 cd Finance/
 sudo apt-get -y install mysql-server
