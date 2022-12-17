@@ -16,21 +16,8 @@ pipeline {
         }
       }
    }
-     stage ('test') {
-       agent{label 'awsDevelop'}
-      steps {
-        sh '''#!/bin/bash
-        source test-env/bin/activate
-        py.test --verbose --junit-xml test-reports/results.xml
-        ''' 
-      }
-      post{
-        always {
-          junit 'test-reports/results.xml'
-        }
-      }
-     }
-  /*stage ('dockerHub') {
+     
+  stage ('dockerHub') {
             agent{label 'awsDevelop'}
             steps {
             withCredentials([string(credentialsId: 'API_KEY', variable: 'API_KEY')])
@@ -47,6 +34,5 @@ pipeline {
               }
             }
         }  
-*/
   }
 }
