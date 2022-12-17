@@ -4,4 +4,8 @@ resource "aws_ecs_cluster" "aws-ecs-cluster" {
   tags = {
     Name = "finance-ecs"
   }
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
