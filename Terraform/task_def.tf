@@ -47,20 +47,6 @@ resource "aws_ecs_task_definition" "aws-ecs-task" {
             "value": "5000"
          }
       ]
-    },
-    {
-      "name": "datadog-agent",
-      "image": "datadog/agent:latest",
-      "environment": [
-        {
-          "name": "DD_API_KEY",
-          "value": "f14a419f4854b57b3f626865c2ae12763f2cfa31"
-        },
-        {
-          "name": "ECS_FARGATE",
-          "value": "true"
-        }
-      ]
     }
   ]
   EOF
