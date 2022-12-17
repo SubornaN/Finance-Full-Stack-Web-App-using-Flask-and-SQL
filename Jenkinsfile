@@ -21,7 +21,6 @@ pipeline {
       steps {
         sh '''#!/bin/bash
         source test-env/bin/activate
-        cd tests
         py.test --verbose --junit-xml test-reports/results.xml
         ''' 
       }
