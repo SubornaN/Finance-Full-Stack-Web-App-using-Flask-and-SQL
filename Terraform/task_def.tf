@@ -7,7 +7,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task" {
   [
     {
       "name": "finance-container",
-      "image": "suborna/finance_app:v7",
+      "image": "suborna/finance_app:v8",
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
